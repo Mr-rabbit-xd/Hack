@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bunty Hack - Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      color: #00ffcc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      background: black;
+    }
+
+    #bg-video {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      z-index: -1;
+      object-fit: cover;
+      filter: brightness(0.15);
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 20px #00ffcc;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #00ffcc;
+    }
+
+    input {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-bottom: 1px dashed #00ffcc;
+      background: transparent;
+      color: #00ffcc;
+      font-size: 16px;
+    }
+
+    input:focus {
+      outline: none;
+      border-bottom: 1px solid #00ffcc;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #00ffcc;
+      color: black;
+      font-weight: bold;
+      box-shadow: 0 0 10px #00ffcc;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: black;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
+      cursor: pointer;
+    }
+
+    #msg {
+      margin-top: 15px;
+      color: #ff5555;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🎥 Background Video -->
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="https://cdn.pixabay.com/vimeo/769088362/abstract-131767.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="container">
+    <h2>Welcome, <span id="username">Loading...</span></h2>
+
+    <input type="text" id="period" placeholder="Enter Period Number" />
+    <button onclick="submitPeriod()">Submit</button>
+
+    <button onclick="logout()" style="margin-top: 20px;">Logout</button>
+
+    <div id="msg"></div>
+  </div>
+
+  <!-- ⚙️ JS Logic -->
+  <script>
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      window.location.href = "/login.html";
+    }
+
+    // Decode token to get username (basic method)
+    function parseJwt(token) {
+      try {
+        return JSON.parse(atob(token.split('.')[1]));
+      } catch (e) {
+        return null;
+      }
+    }
+
+    const userData = parseJwt(token);
+    if (userData && userData.username) {
+      document.getElementById("username").innerText = userData.username;
+    } else {
+      localStorage.removeItem("token");
+      window.location.href = "/login.html";
+    }
+
+    function submitPeriod() {
+      const period = document.getElementById("period").value;
+      if (!period) {
+        document.getElementById("msg").innerText = "Please enter a period number.";
+        return;
+      }
+
+      // You can send this to your backend if needed
+      document.getElementById("msg").innerText = `Submitted period number: ${period}`;
+    }
+
+    function logout() {
+      localStorage.removeItem("token");
+      window.location.href = "/login.html";
+    }
+  </script>
+
+</body>
+</html>
