@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bunty Hack - Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      color: #00ffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #bg-video {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100vw;
+      min-height: 100vh;
+      z-index: -1;
+      object-fit: cover;
+      filter: brightness(0.15);
+    }
+
+    .profile-pic {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #00ffff;
+      object-fit: cover;
+      box-shadow: 0 0 15px #00ffff;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 30px 20px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 350px;
+      text-align: center;
+      box-shadow: 0 0 20px #00ffff;
+    }
+
+    input {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-bottom: 1px dashed #00ffff;
+      background: transparent;
+      color: #00ffff;
+      font-size: 16px;
+    }
+
+    input:focus {
+      outline: none;
+      border-bottom: 1px solid #00ffff;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    button {
+      width: 48%;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #00ffff;
+      color: black;
+      font-weight: bold;
+      box-shadow: 0 0 10px #00ffff;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: black;
+      color: #00ffff;
+      border: 1px solid #00ffff;
+      cursor: pointer;
+    }
+
+    #msg {
+      margin-top: 15px;
+      color: #ff5555;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🎥 Video Background -->
+  <video autoplay muted loop playsinline id="bg-video">
+    <source src="https://cdn.pixabay.com/vimeo/769088362/abstract-131767.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- 👤 Profile Logo -->
+  <img src="https://files.catbox.moe/koyzbo.png" alt="Bunty Hack" class="profile-pic" />
+
+  <!-- 🧾 Login Form -->
+  <div class="container">
+    <input type="text" id="username" placeholder="Enter Username" />
+    <input type="password" id="password" placeholder="Enter Password" />
+
+    <div class="button-row">
+      <button onclick="showKeyMsg()">GET KEY</button>
+      <button onclick="login()">LOGIN</button>
+    </div>
+
+    <div id="msg"></div>
+  </div>
+
+  <!-- ⚙️ JS Logic -->
+  <script>
+    function showKeyMsg() {
+      document.getElementById('msg').innerText = 'Key required only for Signup. Contact admin.';
+    }
+
+    async function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+      document.getElementById('msg').innerText = data.message;
+
+      if (res.ok && data.token) {
+        localStorage.setItem('token', data.token);
+        setTimeout(() => window.location.href = '/dashboard.html', 1000);
+      }
+    }
+  </script>
+
+</body>
+</html>
