@@ -1,10 +1,14 @@
 {
   "name": "bunty-hq-auth",
   "version": "1.0.0",
-  "description": "Signup system for Bunty HQ",
+  "description": "Private Prediction Signup System",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "echo Installed!"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
