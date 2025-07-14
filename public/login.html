@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Bunty Hack - Login</title>
+  <title>Login - Bunty HQ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
   <style>
     * {
       margin: 0;
@@ -11,144 +13,212 @@
     }
 
     body {
-      font-family: 'Courier New', monospace;
-      color: #00ffff;
+      background-color: #0d1117;
+      font-family: 'Poppins', sans-serif;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    /* Loader Screen */
+    .loader-screen {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background-color: #0d1117;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      overflow: hidden;
+      z-index: 9999;
+      animation: fadeOut 2s ease-in-out 2.5s forwards;
     }
 
-    #bg-video {
-      position: fixed;
-      right: 0;
-      bottom: 0;
-      min-width: 100vw;
-      min-height: 100vh;
-      z-index: -1;
-      object-fit: cover;
-      filter: brightness(0.15);
-    }
-
-    .profile-pic {
-      width: 120px;
-      height: 120px;
+    .loader-screen img {
+      width: 90px;
       border-radius: 50%;
-      border: 3px solid #00ffff;
-      object-fit: cover;
-      box-shadow: 0 0 15px #00ffff;
+      animation: pulse 2s infinite;
+    }
+
+    .loader-text {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #ff66cc;
+      animation: blink 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 0, 128, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(255, 0, 128, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 0, 128, 0); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Logo + Orbit Ring */
+    .logo-wrapper {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 50px auto 20px;
+    }
+
+    .logo-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 2;
+      box-shadow: 0 0 12px #ff66cc;
+    }
+
+    .orbit-ring {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      position: absolute;
+      border: 3px solid transparent;
+      border-top: 3px solid #ff00cc;
+      border-right: 3px solid #ff66cc;
+      animation: rotate 2.5s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Login Form */
+    .form-box {
+      background-color: #161b22;
+      width: 90%;
+      max-width: 380px;
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px #ff00cc;
+      display: none;
+      animation: fadeIn 1s ease-in-out forwards;
+    }
+
+    .form-box h2 {
+      text-align: center;
+      color: #ff66cc;
       margin-bottom: 20px;
     }
 
-    .container {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 30px 20px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 350px;
-      text-align: center;
-      box-shadow: 0 0 20px #00ffff;
-    }
-
-    input {
-      width: 90%;
+    .form-box input {
+      width: 100%;
       padding: 12px;
       margin: 10px 0;
-      border: none;
-      border-bottom: 1px dashed #00ffff;
-      background: transparent;
-      color: #00ffff;
-      font-size: 16px;
+      border: 1px solid #ff66cc;
+      border-radius: 8px;
+      background-color: #0d1117;
+      color: white;
+      font-size: 15px;
     }
 
-    input:focus {
-      outline: none;
-      border-bottom: 1px solid #00ffff;
-    }
-
-    .button-row {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
-
-    button {
-      width: 48%;
-      padding: 10px;
-      font-size: 16px;
+    .form-box button {
+      width: 100%;
+      padding: 12px;
       border: none;
       border-radius: 8px;
-      background: #00ffff;
-      color: black;
+      background: linear-gradient(to right, #ff00cc, #ff66cc);
+      color: #000;
       font-weight: bold;
-      box-shadow: 0 0 10px #00ffff;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background: black;
-      color: #00ffff;
-      border: 1px solid #00ffff;
+      font-size: 16px;
       cursor: pointer;
+      transition: background 0.3s;
     }
 
-    #msg {
+    .form-box button:hover {
+      background: linear-gradient(to right, #ff66cc, #ff00cc);
+    }
+
+    .form-box p {
+      text-align: center;
       margin-top: 15px;
-      color: #ff5555;
-      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .form-box a {
+      color: #ff66cc;
+      text-decoration: none;
+    }
+
+    .telegram-link {
+      text-align: center;
+      margin: 15px auto;
+      font-size: 14px;
+    }
+
+    @media (max-width: 400px) {
+      .logo-wrapper {
+        width: 120px;
+        height: 120px;
+      }
+
+      .logo-img {
+        width: 80px;
+        height: 80px;
+        top: 20px;
+        left: 20px;
+      }
+
+      .orbit-ring {
+        width: 120px;
+        height: 120px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- 🎥 Video Background -->
-  <video autoplay muted loop playsinline id="bg-video">
-    <source src="https://cdn.pixabay.com/vimeo/769088362/abstract-131767.mp4" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-
-  <!-- 👤 Profile Logo -->
-  <img src="https://files.catbox.moe/koyzbo.png" alt="Bunty Hack" class="profile-pic" />
-
-  <!-- 🧾 Login Form -->
-  <div class="container">
-    <input type="text" id="username" placeholder="Enter Username" />
-    <input type="password" id="password" placeholder="Enter Password" />
-
-    <div class="button-row">
-      <button onclick="showKeyMsg()">GET KEY</button>
-      <button onclick="login()">LOGIN</button>
-    </div>
-
-    <div id="msg"></div>
+  <!-- Loader -->
+  <div class="loader-screen" id="loader">
+    <img src="https://files.catbox.moe/koyzbo.png" alt="Loading..." />
+    <div class="loader-text">Welcome to Bunty HQ...</div>
   </div>
 
-  <!-- ⚙️ JS Logic -->
+  <!-- Logo with Glow Ring -->
+  <div class="logo-wrapper">
+    <div class="orbit-ring"></div>
+    <img src="https://files.catbox.moe/koyzbo.png" alt="Logo" class="logo-img" />
+  </div>
+
+  <!-- Form -->
+  <div class="form-box" id="formBox">
+    <h2>Login</h2>
+    <form action="/api/login" method="POST">
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="signup.html">Signup</a></p>
+  </div>
+
+  <div class="telegram-link">
+    🔗 Join Telegram: <a href="https://t.me/trader_bunty" target="_blank">@trader_bunty</a>
+  </div>
+
   <script>
-    function showKeyMsg() {
-      document.getElementById('msg').innerText = 'Key required only for Signup. Contact admin.';
-    }
-
-    async function login() {
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ username, password })
-      });
-
-      const data = await res.json();
-      document.getElementById('msg').innerText = data.message;
-
-      if (res.ok && data.token) {
-        localStorage.setItem('token', data.token);
-        setTimeout(() => window.location.href = '/dashboard.html', 1000);
-      }
-    }
+    setTimeout(() => {
+      document.getElementById('formBox').style.display = 'block';
+    }, 2500);
   </script>
 
 </body>
