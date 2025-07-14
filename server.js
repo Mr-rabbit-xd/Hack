@@ -1,24 +1,24 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
+const dotenv = require('dotenv');
+const path = require('path');
+const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
-require('dotenv').config();
 
+dotenv.config();
 const app = express();
-app.use(cors());
-app.use(express.json());
-app.use('/api', authRoutes);
 
-// Serve static frontend files (optional)
-app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public'))); // for signup.html
 
-const PORT = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI;
+app.use('/api', authRoutes); // signup route
 
-mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('MongoDB connected');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
-  .catch(err => console.error('Mongo Error:', err));
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log('✅ MongoDB Connected'))
+  .catch(err => console.log('❌ Mongo Error', err));
+
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
