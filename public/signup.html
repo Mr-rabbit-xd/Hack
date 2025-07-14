@@ -2,242 +2,230 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Bunty HQ | Create Account</title>
+  <title>Signup - Bunty HQ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
   <style>
-    body {
-      background-color: #1a1a2e;
-      font-family: 'Poppins', sans-serif;
-      color: #ffffff;
-      margin: 0;
-      padding: 0;
+    * {
+      margin: 0; padding: 0; box-sizing: border-box;
     }
 
-    /* 🔄 Loader */
-    #loader {
+    body {
+      background-color: #0d1117;
+      font-family: 'Poppins', sans-serif;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    .loader-screen {
       position: fixed;
       width: 100%;
       height: 100%;
-      background: #0f0f20;
+      background-color: #0d1117;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      flex-direction: column;
+      animation: fadeOut 2s ease-in-out 2.5s forwards;
     }
 
-    #loader img {
+    .loader-screen img {
       width: 90px;
-      animation: pulse 1.2s infinite;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .loader-text {
+      margin-top: 15px;
+      font-size: 16px;
+      color: #ff66cc;
+      animation: blink 1.2s infinite;
     }
 
     @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.8; }
-      50% { transform: scale(1.1); opacity: 1; }
-      100% { transform: scale(1); opacity: 0.8; }
+      0% { box-shadow: 0 0 0 0 rgba(255, 0, 128, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(255, 0, 128, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 0, 128, 0); }
     }
 
-    #loader h2.loader-title {
-      margin-top: 15px;
-      font-size: 22px;
-      color: #cc66ff;
-      animation: glow 2s infinite;
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
 
-    #loader p.loader-subtext {
-      font-size: 14px;
-      color: #aaa;
-      margin-top: 5px;
-      animation: fadeIn 1.5s ease-in-out;
-    }
-
-    @keyframes glow {
-      0% { text-shadow: 0 0 5px #cc66ff; }
-      50% { text-shadow: 0 0 15px #cc66ff; }
-      100% { text-shadow: 0 0 5px #cc66ff; }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
     }
 
     @keyframes fadeIn {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    .main-content {
-      display: none;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
+    .logo-wrapper {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      margin: 50px auto 20px;
     }
 
-    .form-container {
-      background-color: #16213e;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 0 16px rgba(157, 0, 255, 0.4);
-      width: 320px;
-    }
-
-    .logo-container {
-      text-align: center;
-      margin-bottom: 18px;
-    }
-
-    .logo-container img {
-      width: 70px;
+    .logo-img {
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
-      margin-bottom: 8px;
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 2;
+      box-shadow: 0 0 12px #ff66cc;
     }
 
-    .logo-container h1 {
-      font-size: 22px;
-      color: #cc66ff;
-      margin: 0;
+    .orbit-ring {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      position: absolute;
+      border: 3px solid transparent;
+      border-top: 3px solid #ff00cc;
+      border-right: 3px solid #ff66cc;
+      animation: rotate 2.5s linear infinite;
+      z-index: 1;
     }
 
-    .subtext {
-      font-size: 13px;
-      color: #aaaaaa;
-      margin-top: 4px;
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
-    input {
-      width: 100%;
-      padding: 11px;
-      margin-bottom: 14px;
-      border: none;
-      border-radius: 6px;
-      background: #0f0f20;
-      color: #fff;
-      border: 1px solid #9d00ff;
-      font-size: 13px;
+    .form-box {
+      background-color: #161b22;
+      width: 90%;
+      max-width: 380px;
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px #ff00cc;
+      display: none;
+      animation: fadeIn 1s ease-in-out forwards;
     }
 
-    .private-key-group {
-      display: flex;
-      gap: 5px;
+    .form-box h2 {
+      text-align: center;
+      color: #ff66cc;
+      margin-bottom: 20px;
     }
 
-    .private-key-group input {
-      flex: 1;
-    }
-
-    .private-key-group button {
-      padding: 11px;
-      font-size: 13px;
-      background: #9d00ff;
-      border: none;
-      border-radius: 6px;
-      color: #fff;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .private-key-group button:hover {
-      background: #cc66ff;
-    }
-
-    button[type="submit"] {
+    .form-box input {
       width: 100%;
       padding: 12px;
-      background: linear-gradient(to right, #9d00ff, #cc66ff);
+      margin: 10px 0;
+      border: 1px solid #ff66cc;
+      border-radius: 8px;
+      background-color: #0d1117;
+      color: white;
+      font-size: 15px;
+    }
+
+    .form-box button, .form-box .getkey {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
       border: none;
-      border-radius: 6px;
-      color: #fff;
+      border-radius: 8px;
+      background: linear-gradient(to right, #ff00cc, #ff66cc);
+      color: #000;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
-      transition: 0.3s;
+      transition: background 0.3s;
+      display: block;
     }
 
-    button[type="submit"]:hover {
-      box-shadow: 0 0 8px #cc66ff;
+    .form-box button:hover,
+    .form-box .getkey:hover {
+      background: linear-gradient(to right, #ff66cc, #ff00cc);
     }
 
-    p {
+    .getkey {
       text-align: center;
-      margin-top: 16px;
-      font-size: 13px;
-    }
-
-    a {
-      color: #cc66ff;
+      background-color: #161b22;
+      border: 1px solid #ff66cc;
+      color: #ff66cc;
       text-decoration: none;
     }
 
-    footer {
+    .form-box p {
       text-align: center;
-      font-size: 13px;
-      margin-top: 20px;
-      color: #888;
+      margin-top: 15px;
+      font-size: 14px;
     }
 
-    footer a {
-      color: #cc66ff;
+    .form-box a {
+      color: #ff66cc;
+      text-decoration: none;
     }
 
-    @media screen and (max-width: 400px) {
-      .form-container {
-        width: 90%;
-        padding: 20px;
-      }
+    .telegram-link {
+      text-align: center;
+      margin: 15px auto;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
 
-  <!-- 🔄 Loader -->
-  <div id="loader">
+  <!-- Loader -->
+  <div class="loader-screen" id="loader">
     <img src="https://files.catbox.moe/koyzbo.png" alt="Loading..." />
-    <h2 class="loader-title">Bunty HQ</h2>
-    <p class="loader-subtext">Private Prediction Access<br><a href="https://t.me/trader_bunty" target="_blank">t.me/trader_bunty</a></p>
+    <div class="loader-text">Welcome to Bunty HQ...</div>
   </div>
 
-  <!-- 🧾 Main Signup Section -->
-  <div class="main-content">
-    <div class="form-container">
-      <div class="logo-container">
-        <img src="https://files.catbox.moe/koyzbo.png" alt="Bunty HQ Logo" />
-        <h1>Bunty HQ</h1>
-        <p class="subtext">
-          Private Prediction Access<br>
-          Join: <a href="https://t.me/trader_bunty" target="_blank">@trader_bunty</a>
-        </p>
-      </div>
-
-      <form action="/api/signup" method="POST">
-        <input type="text" name="username" placeholder="Username" required />
-        <input type="password" name="password" placeholder="Password" required />
-        <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
-
-        <div class="private-key-group">
-          <input type="password" name="privateKey" placeholder="Private Key" required />
-          <button type="button" onclick="window.location.href='https://t.me/trader_bunty'">🔑 Get Key</button>
-        </div>
-
-        <button type="submit">Sign Up</button>
-        <p>Already have an account? <a href="login.html">Login</a></p>
-      </form>
-
-      <!-- 🔗 Footer -->
-      <footer>
-        Powered by <a href="https://t.me/trader_bunty" target="_blank">@trader_bunty</a>
-      </footer>
-    </div>
+  <!-- Logo -->
+  <div class="logo-wrapper">
+    <div class="orbit-ring"></div>
+    <img src="https://files.catbox.moe/koyzbo.png" alt="Logo" class="logo-img" />
   </div>
 
-  <!-- ⌛ Script -->
+  <!-- Signup Form -->
+  <div class="form-box" id="formBox">
+    <h2>Signup</h2>
+    <form action="/api/signup" method="POST">
+      <input type="text" name="username" placeholder="Username" required />
+      <input type="password" name="password" placeholder="Password" required />
+      <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
+      <input type="text" name="privateKey" placeholder="Private Key" required />
+      <button type="submit">Signup</button>
+    </form>
+    <a href="https://t.me/trader_bunty" target="_blank" class="getkey">🔑 Get Key</a>
+    <p>Already have an account? <a href="#" onclick="redirectWithLoader('login.html')">Login</a></p>
+  </div>
+
+  <div class="telegram-link">
+    🔗 Join Telegram: <a href="https://t.me/trader_bunty" target="_blank">@trader_bunty</a>
+  </div>
+
+  <!-- JS for loader on redirect -->
   <script>
-    window.addEventListener("load", function () {
-      const loader = document.getElementById("loader");
-      const content = document.querySelector(".main-content");
+    function redirectWithLoader(target) {
+      localStorage.setItem("redirected", "yes");
+      window.location.href = target;
+    }
+
+    if (localStorage.getItem("redirected") === "yes") {
+      document.getElementById("loader").style.display = "flex";
+      document.getElementById("formBox").style.display = "none";
       setTimeout(() => {
-        loader.style.display = "none";
-        content.style.display = "flex";
-      }, 1200);
-    });
+        document.getElementById("loader").style.display = "none";
+        document.getElementById("formBox").style.display = "block";
+        localStorage.removeItem("redirected");
+      }, 2000);
+    } else {
+      setTimeout(() => {
+        document.getElementById("formBox").style.display = "block";
+      }, 2500);
+    }
   </script>
+
 </body>
 </html>
