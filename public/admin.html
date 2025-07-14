@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Login - DV WIN</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #0a0a0f;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    .box {
+      background: #111;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #8a2be2aa;
+    }
+    input {
+      padding: 10px;
+      margin: 10px 0;
+      width: 250px;
+      background: #1f1f2e;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+    }
+    button {
+      padding: 10px 20px;
+      background: #8a2be2;
+      border: none;
+      border-radius: 6px;
+      color: #fff;
+      cursor: pointer;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Admin Panel Login</h2>
+    <form id="adminForm">
+      <input type="text" placeholder="Admin Username" id="username" required /><br/>
+      <input type="password" placeholder="Admin Password" id="password" required /><br/>
+      <button type="submit">Login</button>
+    </form>
+    <p id="msg" style="color: red;"></p>
+  </div>
+
+  <script>
+    document.getElementById("adminForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem("adminToken", data.token);
+        window.location.href = "/admin-dashboard.html"; // পরের ধাপে তৈরি করবো
+      } else {
+        document.getElementById("msg").innerText = data.message;
+      }
+    });
+  </script>
+</body>
+</html>
